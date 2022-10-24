@@ -1,13 +1,13 @@
-const Thought = require('../models/Thought');
+const {Thought, User } = require('../models');
 
 module.exports = {
     getThoughts(req, res) {
         Thought.find()
-            .then((users) => res.json(thoughts))
+            .then((thoughts) => res.json(thoughts))
             .catch((err) => res.status(500).json(err));
     },
     getSingleThought(req, res) {
-        Thought.findOne({ _id: req.params.userId })
+        Thought.findOne({ _id: req.params.thoughtId })
             .select('-__v')
             .then((thought) =>
                 !thought
@@ -21,7 +21,7 @@ module.exports = {
           .then((thought) => {
             return User.findOneAndUpdate(
               { _id: req.body.userId },
-              { $addToSet: { thoughts: thoughts._id } },
+              { $addToSet: { thoughts: thought._id } },
               { new: true }
             );
           })
