@@ -39,25 +39,47 @@ module.exports = {
             });
     },
 
-    //   deleteUser(req, res) {
-    //     User.findOneAndRemove({ _id: req.params.videoId })
-    //       .then((user) =>
-    //         !user
-    //           ? res.status(404).json({ message: 'No user with this id!' })
-    //           : User.findOneAndUpdate(
-    //               { videos: req.params.videoId },
-    //               { $pull: { videos: req.params.videoId } },
-    //               { new: true }
-    //             )
-    //       )
-    //       .then((user) =>
-    //         !user
-    //           ? res
-    //               .status(404)
-    //               .json({ message: 'Video created but no user with this id!' })
-    //           : res.json({ message: 'Video successfully deleted!' })
-    //       )
-    //       .catch((err) => res.status(500).json(err));
-    //   },
+      deleteUser(req, res) {
+        User.findOneAndRemove({ _id: req.params.userId })
+          .then((user) =>
+            !user
+              ? res.status(404).json({ message: 'No user with this id!' })
+              : Thought.findOneAndUpdate(
+                  { username: req.params.userId.username },
+                  { $pull: { username: req.params.userId.username } },
+                  { new: true }
+                )
+          )
+          .then((thought) =>
+            !thought
+              ? res
+                  .status(404)
+                  .json({ message: 'No user with this id!' })
+              : res.json({ message: 'User successfully deleted!' })
+          )
+          .catch((err) => res.status(500).json(err));
+      },
+
+    addFriend(req, res) {
+        User.findOneAndUpdate({ _id: req.params.userId })
+          .then((user) => {
+            return User.findOneAndUpdate(
+              { _id: req.body.userId },
+              { $push: { friends: thought._id } },
+              { new: true }
+            );
+          })
+          .then((user) =>
+            !user
+              ? res.status(404).json({
+                  message: 'Thought created, but found no user with that ID',
+                })
+              : res.json('Created the thought 🎉')
+          )
+          .catch((err) => {
+            console.log(err);
+            res.status(500).json(err);
+          });
+      },
 
 }
