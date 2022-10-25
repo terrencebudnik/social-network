@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose');
-const Reaction = require('./Reaction');
+const reactionSchema = require('./Reaction');
+
 
 
 const thoughtSchema = new Schema(
@@ -26,9 +27,9 @@ const thoughtSchema = new Schema(
       minLength: 15,
       maxLength: 500,
     },
-    reactions: [Reaction],
+    reactions: [reactionSchema],
   },
-  {
+    {
     toJSON: {
       virtuals: true,
     },
